@@ -19,7 +19,7 @@ function App() {
       description: '',
     });
 
-  
+ 
    const handleSubmit = (e) => {
       e.preventDefault();
       console.log('Form submitted:', formData);
@@ -104,9 +104,9 @@ console.log(localStorage.getItem("data"))
 
 
   
-  // only shows confirm location when lat and lng have a location
+
   return ( 
-    <div>
+    <div className='grid'>
       <h1 className="font-silkscreen text-center font-bold text-city-white text-7xl ">City<span className="text-city-bright-red">X</span></h1>
       <h2 className="font-silkscreen text-city-white text-center text-5xl">SERVER1 | RIHAL</h2>
       <div className="bg-city-blue w-[80%] flex h-[40rem] shadow-inner-xl place-self-center my-10">
