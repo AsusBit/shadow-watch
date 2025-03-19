@@ -6,7 +6,7 @@ import CrimeCard from './components/CrimeCard';
 function App() {
   // NEXT STEPS
   // phone optimization
-  const [data, setData] = useState([])
+  const [data, setData] = useState({ crimes: [] })
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
   const [error, setError] = useState()
@@ -25,54 +25,53 @@ function App() {
       console.log('Form submitted:', formData);
       const now = new Date();
       const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}-${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}`;  
-      const updatedData = {"crimes": [
-        ...data['crimes'], 
-        {
-        "id": data["crimes"].length+1,
-        "report_details": formData.description,
-        "crime_type": formData.crimeType,
-        "latitude": lat,
-        "longitude": lng,
-        "report_date_time": formattedDate,
-        "report_status": "Pending" }
-    ]
-}
+      const updatedData = {
+        crimes: [
+          ...(data.crimes || []),
+          {
+            id: (data.crimes || []).length + 1,
+            report_details: formData.description,
+            crime_type: formData.crimeType,
+            latitude: lat,
+            longitude: lng,
+            report_date_time: formattedDate,
+            report_status: "Pending"
+          }
+        ]
+      };
       setData(updatedData);
-localStorage.setItem("data", JSON.stringify(updatedData));
-console.log(localStorage.getItem("data"))
+      localStorage.setItem("data", JSON.stringify(updatedData));
+      console.log(localStorage.getItem("data"));
 
-      setEnableSelect(false)
-      setShowConfirm(false)
+      setEnableSelect(false);
+      setShowConfirm(false);
     };
 
-    useEffect(()=>{
-      const storedData = localStorage.getItem("data")
-      if (storedData){
-        setData(JSON.parse(storedData))
-        setLoading(false)
+    useEffect(() => {
+      const storedData = localStorage.getItem("data");
+      if (storedData) {
+        setData(JSON.parse(storedData));
+        setLoading(false);
       } else {
-      const fetchData = async () => {
-      try{
-        const response = await fetch('/data.json')
-        if (!response.ok){
-          throw new Error("An error has occurred while fetching.")
-        }
-        const result = await response.json();
-        setData(result);
-        if (!storedData){
-          localStorage.setItem("data", JSON.stringify(data));
-        }
-      } catch (e) {
-        setError(e)
-      } finally {
-        setLoading(false)
+        const fetchData = async () => {
+          try {
+            const response = await fetch('/data.json');
+            if (!response.ok) {
+              throw new Error("An error has occurred while fetching.");
+            }
+            const result = await response.json();
+            setData(result);
+            localStorage.setItem("data", JSON.stringify(result));
+          } catch (e) {
+            setError(e);
+          } finally {
+            setLoading(false);
+          }
+        };
+
+        fetchData();
       }
-    }
-
-
-      fetchData()
-  }
-  }, [])
+    }, []);
 
   // Filter crimes based on search input
   const filteredCrimes = useMemo(() => {

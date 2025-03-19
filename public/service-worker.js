@@ -1,10 +1,13 @@
-const CACHE_NAME = 'my-app-cache-v1';
+const CACHE_NAME = 'shadow-watch-cache-v1';
 const urlsToCache = [
   '/',
   '/index.html',
-  '/static/js/main.chunk.js',
-  '/static/js/0.chunk.js',
-  '/static/js/bundle.js',
+  '/manifest.json',
+  '/data.json',
+  '/shadow-watch.png',
+  '/shadow-watch 192.png',
+  '/shadow-watch 512.png',
+  '/shadow-watch 64.ico'
 ];
 
 self.addEventListener('install', (event) => {
@@ -12,7 +15,13 @@ self.addEventListener('install', (event) => {
     caches.open(CACHE_NAME)
       .then((cache) => {
         console.log('Opened cache');
-        return cache.addAll(urlsToCache);
+        return Promise.all(
+          urlsToCache.map(url => {
+            return cache.add(url).catch(err => {
+              console.warn(`Failed to cache ${url}:`, err);
+            });
+          })
+        );
       })
   );
 });
@@ -21,25 +30,37 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request)
       .then((response) => {
+        // Return cached response if found
         if (response) {
           return response;
         }
-        return fetch(event.request)
+
+        // Clone the request because it can only be used once
+        const fetchRequest = event.request.clone();
+
+        return fetch(fetchRequest)
           .then((response) => {
             // Check if we received a valid response
             if (!response || response.status !== 200 || response.type !== 'basic') {
               return response;
             }
 
-            // Clone the response
+            // Clone the response because it can only be used once
             const responseToCache = response.clone();
 
             caches.open(CACHE_NAME)
               .then((cache) => {
                 cache.put(event.request, responseToCache);
+              })
+              .catch(err => {
+                console.warn('Failed to cache response:', err);
               });
 
             return response;
+          })
+          .catch(() => {
+            // If fetch fails, return offline fallback if available
+            return caches.match('/offline.html');
           });
       })
   );
@@ -47,6 +68,7 @@ self.addEventListener('fetch', (event) => {
 
 self.addEventListener('activate', (event) => {
   const cacheWhitelist = [CACHE_NAME];
+  
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
