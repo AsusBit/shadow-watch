@@ -1,6 +1,6 @@
 {
   "short_name": "Shadow-Watch",
-  "name": "Shadow Watch",
+  "name": "Shadow Watch - Your Personal Security Companion",
   "icons": [
     {
       "src": "shadow-watch 64.ico",
@@ -8,18 +8,19 @@
       "type": "image/x-icon"
     },
     {
-      "src": "shadow-watch 192.ico",
+      "src": "shadow-watch 192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "shadow-watch 512.ico",
+      "src": "shadow-watch 512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#1a1a1a",
+  "background_color": "#ffffff",
+  "description": "A modern security monitoring and alert system for your digital assets"
 }
