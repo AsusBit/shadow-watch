@@ -55,14 +55,39 @@ function App() {
       } else {
         const fetchData = async () => {
           try {
-            const response = await fetch('/data.json');
-            if (!response.ok) {
-              throw new Error("An error has occurred while fetching.");
+            // Try multiple possible paths for data.json
+            const possiblePaths = [
+              '/data.json',
+              './data.json',
+              'data.json',
+              '/shadow-watch/data.json'
+            ];
+
+            let response = null;
+            let result = null;
+
+            for (const path of possiblePaths) {
+              try {
+                response = await fetch(path);
+                if (response.ok) {
+                  result = await response.json();
+                  console.log(`Successfully fetched data from ${path}`);
+                  break;
+                }
+              } catch (e) {
+                console.warn(`Failed to fetch from ${path}:`, e);
+                continue;
+              }
             }
-            const result = await response.json();
+
+            if (!result) {
+              throw new Error("Could not fetch data from any location");
+            }
+
             setData(result);
             localStorage.setItem("data", JSON.stringify(result));
           } catch (e) {
+            console.error("Data fetching error:", e);
             setError(e);
           } finally {
             setLoading(false);

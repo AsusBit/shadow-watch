@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "routes": [
+    {
+      "src": "/data.json",
+      "headers": {
+        "cache-control": "public, max-age=0, must-revalidate"
+      }
+    }
+  ]
+} 
