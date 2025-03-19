@@ -1,46 +1,25 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-const FormModal = ({ onClose, setData, data }) => {
-  const [formData, setFormData] = useState({
-    crimeType: '',
-    description: '',
-    latitude: '',
-    longitude: '',
-  });
+const FormModal = ({ onClose, formData, setFormData, setEnableSelect }) => {
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Form submitted:', formData);
-    const now = new Date();
-    const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}-${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}`;  
-    setData({"crimes": [
-        ...data['crimes'], 
-        {
-        "id": data["crimes"].length+1,
-        "report_details": formData.description,
-        "crime_type": formData.crimeType,
-        "latitude": parseFloat(formData.latitude),
-        "longitude": parseFloat(formData.longitude),
-        "report_date_time": formattedDate,
-        "report_status": "Pending" }
-    ]
-}
-)
-    onClose(); 
-  };
+  const handleSelectMarker = () => {
+    setEnableSelect(true);
+    onClose();
+  }
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 font-silkscreen flex items-center justify-center">
-      <div className="bg-city-bright-blue p-6 rounded shadow-lg w-96">
-        <h2 className="text-xl font-bold mb-4">Report a Crime</h2>
-        <form onSubmit={handleSubmit}>
+      <div className="bg-city-blue p-6 rounded shadow-lg w-96">
+        <h2 className="text-xl font-bold mb-4 text-city-white">Report a Crime</h2>
+        <form onSubmit={(e)=>e.preventDefault()}>
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1" htmlFor="crimeType">
+            <label className="block text-sm text-city-white font-medium mb-1" htmlFor="crimeType">
               Crime Type
             </label>
             <select
@@ -60,7 +39,7 @@ const FormModal = ({ onClose, setData, data }) => {
             </select>
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1" htmlFor="description">
+            <label className="block text-sm text-city-white font-medium mb-1" htmlFor="description">
               Description
             </label>
             <textarea
@@ -73,34 +52,7 @@ const FormModal = ({ onClose, setData, data }) => {
               required
             ></textarea>
           </div>
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1" htmlFor="latitude">
-              Latitude
-            </label>
-            <input
-              type="number"
-              id="latitude"
-              name="latitude"
-              value={formData.latitude}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded px-3 py-2"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1" htmlFor="longitude">
-              Longitude
-            </label>
-            <input
-              type="number"
-              id="longitude"
-              name="longitude"
-              value={formData.longitude}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded px-3 py-2"
-              required
-            />
-          </div>
+          
           <div className="flex justify-end gap-2">
             <button
               type="button"
@@ -110,10 +62,10 @@ const FormModal = ({ onClose, setData, data }) => {
               Cancel
             </button>
             <button
-              type="submit"
+              onClick={handleSelectMarker}
               className="bg-city-ocean text-city-white px-4 py-2 rounded"
             >
-              Submit
+              Select Crime Location
             </button>
           </div>
         </form>

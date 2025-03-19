@@ -1,16 +1,16 @@
-import React, {useState, useEffect} from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
-import {Search, Hourglass, Car, Users, CheckCircle, ShieldAlert, Skull, Lock, UserMinus, Banknote, Gavel} from 'lucide-react'
+import React from 'react';
+import { MapContainer, TileLayer, Marker, Popup,  useMapEvents } from 'react-leaflet';
+import {Search, Hourglass, Car, Users, CheckCircle,  Skull, Lock, UserMinus, Banknote, Gavel} from 'lucide-react'
 import L from 'leaflet';
 
-import FormModal from './FormModal';
-// Fix the default marker icon issue
+// Fix the default marker icon issue from the library
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
   iconUrl: require('leaflet/dist/images/marker-icon.png'),
   shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 });
+
 
 
 
@@ -36,16 +36,29 @@ const statusIcons = {
     return date.toLocaleString();
   }
   
-const MapComponent = ({crimes, markerRefs}) => {
+  const MapClickHandler = ({setLat, setLng, showConfirm, setShowConfirm}) => {
+    useMapEvents({
+      click: (e) => {
+        const {lat, lng} = e.latlng;
+        setLat(lat)
+        setLng(lng)
+        if (!showConfirm){
+          setShowConfirm(true)
+        }
+      }
+    })
+    return null
+  }
+const MapComponent = ({crimes, markerRefs, setLat, setLng, enableSelect, showConfirm, setShowConfirm}) => {
   const position = [21.505, 56.09]; // Latitude and Longitude for the center of the map
-
+  // what I can do is, take the lat and lng from here, and if their values have any value (from null to true) it places a marker or submits the function
   return (
     <MapContainer center={position} zoom={7} style={{ height: '100%', width: '100%' }}>
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
-      
+      {enableSelect && <MapClickHandler showConfirm={showConfirm} setShowConfirm={setShowConfirm} setLat={setLat} setLng={setLng}/>}
     {crimes.map((crime) => (
   <Marker ref={(el) => (markerRefs.current[crime.id] = el)} position={[crime.latitude, crime.longitude]} key={crime.id} color={'#FFF'}>
     <Popup >
@@ -97,6 +110,7 @@ const MapComponent = ({crimes, markerRefs}) => {
 ))}
 
     </MapContainer>
+
   );
 };
 

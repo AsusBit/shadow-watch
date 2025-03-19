@@ -1,4 +1,4 @@
-import {Search, Hourglass, Car, Users, CheckCircle, ShieldAlert, Skull, Lock, UserMinus, Banknote, Gavel} from 'lucide-react'
+import {Search, Hourglass, Car, Users, CheckCircle, Skull, Lock, UserMinus, Banknote, Gavel} from 'lucide-react'
 
 export default function CrimeCard({type, latitude, longitude, status, func}){
     const statusIcons = {
@@ -27,8 +27,8 @@ export default function CrimeCard({type, latitude, longitude, status, func}){
 
       {/* location */}
         <div className='absolute top-1/2 -translate-y-1/2 right-1/2 translate-x-1/2  '>
-        <p className=''>↓↑ longitude: {longitude}</p>
-        <p className=''>←→ latitude:  {latitude}</p>
+        <p className=''>↓↑ longitude: {longitude.toFixed(4)}</p>
+        <p className=''>←→ latitude:  {latitude.toFixed(4)}</p>
         </div>
 
           {/* Status Badge */}

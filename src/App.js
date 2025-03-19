@@ -5,15 +5,53 @@ import FormModal from './components/FormModal';
 import CrimeCard from './components/CrimeCard';
 function App() {
   // NEXT STEPS
-  // apply filters 
   // phone optimization
-  const [data, setData] = useState([]) // data['crimes'] = []
+  const [data, setData] = useState([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
   const [error, setError] = useState()
+  const [lat, setLat] = useState(null)
+  const [lng, setLng] = useState(null)
+  const [showConfirm, setShowConfirm] = useState(false)
+  const [enableSelect, setEnableSelect] = useState(false)
+  const [formData, setFormData] = useState({
+      crimeType: '',
+      description: '',
+    });
 
-  useEffect(()=>{
-    const fetchData = async () => {
+
+   const handleSubmit = (e) => {
+      e.preventDefault();
+      console.log('Form submitted:', formData);
+      const now = new Date();
+      const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}-${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}`;  
+      const updatedData = {"crimes": [
+        ...data['crimes'], 
+        {
+        "id": data["crimes"].length+1,
+        "report_details": formData.description,
+        "crime_type": formData.crimeType,
+        "latitude": lat,
+        "longitude": lng,
+        "report_date_time": formattedDate,
+        "report_status": "Pending" }
+    ]
+}
+      setData(updatedData);
+localStorage.setItem("data", JSON.stringify(updatedData));
+console.log(localStorage.getItem("data"))
+
+      setEnableSelect(false)
+      setShowConfirm(false)
+    };
+
+    useEffect(()=>{
+      const storedData = localStorage.getItem("data")
+      if (storedData){
+        setData(JSON.parse(storedData))
+        setLoading(false)
+      } else {
+      const fetchData = async () => {
       try{
         const response = await fetch('/data.json')
         if (!response.ok){
@@ -21,13 +59,19 @@ function App() {
         }
         const result = await response.json();
         setData(result);
+        if (!storedData){
+          localStorage.setItem("data", JSON.stringify(data));
+        }
       } catch (e) {
         setError(e)
       } finally {
         setLoading(false)
       }
     }
-    fetchData()
+
+
+      fetchData()
+  }
   }, [])
 
   // Filter crimes based on search input
@@ -51,7 +95,6 @@ function App() {
     }
   };
 
-
   const [showModal, setShowModal] = useState(false)
 
   if (loading) return <>Loading...</>
@@ -60,16 +103,20 @@ function App() {
   }
 
 
-
-  return (
+  
+  // only shows confirm location when lat and lng have a location
+  return ( 
     <div>
       <h1 className="font-silkscreen text-center font-bold text-city-white text-7xl ">City<span className="text-city-bright-red">X</span></h1>
       <h2 className="font-silkscreen text-city-white text-center text-5xl">SERVER1 | RIHAL</h2>
       <div className="bg-city-blue w-[80%] flex h-[40rem] shadow-inner-xl place-self-center my-10">
 
+        
         {/* map area */}
-        <div className="flex items-center justify-center w-[50%] z-0 p-2">
-        <MapComponent crimes={filteredCrimes} markerRefs={markerRefs}/>
+        <div className="flex items-center justify-center w-[50%] z-0 p-2 flex-col relative">
+        {enableSelect === true && <p className='font-silkscreen text-city-white'>Select Location Of The Crime</p>}
+        <MapComponent setShowConfirm={setShowConfirm} showConfirm={showConfirm} setEnableSelect={setEnableSelect} enableSelect={enableSelect} crimes={filteredCrimes} markerRefs={markerRefs} lat={lat} lng={lng} setLat={setLat} setLng={setLng}/>
+        {showConfirm && <button  onClick={handleSubmit} className='px-4 py-2 bg-city-ocean text-city-white font-silkscreen rounded'>Confirm Location</button>}
         </div>
 
     <div className="px-10 py-2 w-[50%] ">
@@ -94,7 +141,7 @@ function App() {
         </div>
       </div>
       
-      {showModal && <FormModal setData={setData} data={data} onClose={()=> setShowModal(false)}/>}
+      {showModal && <FormModal setEnableSelect={setEnableSelect} formData={formData} setFormData={setFormData} onClose={()=> setShowModal(false)}/>}
     </div>
   );
 }
