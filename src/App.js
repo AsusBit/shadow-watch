@@ -6,6 +6,10 @@ import CrimeCard from './components/CrimeCard';
 function App() {
   // NEXT STEPS
   // phone optimization
+  // category-based filtering, allowing users to show/hide specific crime types.
+  // min width that the text can handle is 1400 with full words and icons
+  // min width 1235px with only icons
+  // min 684px before card starts breaking: hence you should put the map below
   const [data, setData] = useState({ crimes: [] })
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
@@ -130,23 +134,16 @@ function App() {
   
 
   return ( 
-    <div className='grid'>
-      <h1 className="font-silkscreen text-center font-bold text-city-white text-7xl ">City<span className="text-city-bright-red">X</span></h1>
-      <h2 className="font-silkscreen text-city-white text-center text-5xl">SERVER1 | RIHAL</h2>
-      <div className="bg-city-blue w-[80%] flex h-[40rem] shadow-inner-xl place-self-center my-10">
+    <div className='grid sm:absolute sm:top-1/2 sm:-translate-y-1/2 sm:right-1/2 sm:translate-x-1/2'>
+    <h1 className="font-silkscreen text-center font-bold text-city-white text-5xl sm:text-7xl w-[100vw]">City<span className="text-city-bright-red">X</span></h1>
+    <h2 className="font-silkscreen text-city-white text-center text-3xl sm:text-5xl">SERVER1 | RIHAL</h2>
+    <div className="bg-city-blue w-[95%] sm:w-[80%] block mapbr:flex flex-col mapbr:flex-row h-auto mapbr:h-[40rem] shadow-inner-xl place-self-center my-10">
 
-        
-        {/* map area */}
-        <div className="flex items-center justify-center w-[50%] z-0 p-2 flex-col relative">
-        {enableSelect === true && <p className='font-silkscreen text-city-white'>Select Location Of The Crime</p>}
-        <MapComponent setShowConfirm={setShowConfirm} showConfirm={showConfirm} setEnableSelect={setEnableSelect} enableSelect={enableSelect} crimes={filteredCrimes} markerRefs={markerRefs} lat={lat} lng={lng} setLat={setLat} setLng={setLng}/>
-        {showConfirm && <button  onClick={handleSubmit} className='px-4 py-2 bg-city-ocean text-city-white font-silkscreen rounded'>Confirm Location</button>}
-        </div>
-
-    <div className="px-10 py-2 w-[50%] ">
+      {/* search, crimes and report area */}
+      <div className="px-2 mapbr:px-10 py-2 w-full mapbr:w-[50%]">
         <input type="text" value={search} onChange={(e)=>setSearch(e.target.value)} placeholder="search crimes" className="w-full rounded bg-city-white h-[2rem] p-1 font-silkscreen"></input>
-        {/* search, crimes and report area */}
-        <div className='bg-city-blue w-full p-5 h-[80%] my-3 shadow-inner-xl overflow-y-scroll scroll-smooth space-y-2'>
+        
+        <div className='bg-city-blue w-full p-5 h-[20rem] mapbr:h-[80%] my-3 shadow-inner-xl overflow-y-scroll scroll-smooth space-y-2'>
           {filteredCrimes.map((crime)=>(
             <CrimeCard 
               key={crime.id}
@@ -158,15 +155,21 @@ function App() {
             />
           ))}
         </div>
-        <button onClick={()=>setShowModal(true)} className='bg-city-red font-silkscreen text-white px-5 py-3 active:bg-red-600 duration-75 ease-in-out rounded'>
+        <button onClick={()=>setShowModal(true)} className='bg-city-red font-silkscreen text-white px-5 py-3 active:bg-red-600 duration-75 ease-in-out rounded mb-4 mapbr:mb-0'>
             Report Crime
         </button>
-       
-        </div>
       </div>
       
-      {showModal && <FormModal setEnableSelect={setEnableSelect} formData={formData} setFormData={setFormData} onClose={()=> setShowModal(false)}/>}
+      {/* map area */}
+      <div className="flex items-center justify-center w-full mapbr:w-[50%] z-0 p-2 flex-col relative h-[20rem] mapbr:h-auto">
+        {enableSelect === true && <p className='font-silkscreen text-city-white'>Select Location Of The Crime</p>}
+        <MapComponent setShowConfirm={setShowConfirm} showConfirm={showConfirm} setEnableSelect={setEnableSelect} enableSelect={enableSelect} crimes={filteredCrimes} markerRefs={markerRefs} lat={lat} lng={lng} setLat={setLat} setLng={setLng}/>
+        {showConfirm && <button onClick={handleSubmit} className='px-4 py-2 bg-city-ocean text-city-white font-silkscreen rounded'>Confirm Location</button>}
+      </div>
     </div>
+    
+    {showModal && <FormModal setEnableSelect={setEnableSelect} formData={formData} setFormData={setFormData} onClose={()=> setShowModal(false)}/>}
+  </div>
   );
 }
 

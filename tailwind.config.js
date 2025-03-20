@@ -22,6 +22,10 @@ module.exports = {
         },
         boxShadow: {
             "inner-xl": "inset 0 17px 20px rgba(0, 0, 0, 0.25)", // Custom inner shadow
+        },
+        screens: {
+          "ctbr": "1235px",
+          "mapbr" : "684px"
         }
     },
   },

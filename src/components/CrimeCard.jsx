@@ -17,23 +17,24 @@ export default function CrimeCard({type, latitude, longitude, status, func}){
         "Theft": { icon: <Lock color="#1565C0" />, label: "Theft", color: "#1565C0" }
       };
     return (
-        <button onClick={func} className="bg-city-white relative h-[5rem] rounded w-full flex items-center p-2" style={{borderLeft: `6px solid ${crimeTypeIcons[type]?.color}`}}>
+        <button onClick={func} className="bg-city-white relative h-[6rem] ctbr:h-[5rem] rounded w-full block p-2" style={{borderLeft: `6px solid ${crimeTypeIcons[type]?.color}`}}>
+          <div className='flex items-center justify-center mapbr:justify-normal mb-1 mapbr:mb-0'>
           <span className="flex items-center">
             {crimeTypeIcons[type]?.icon}
           </span>
           <span className="font-medium" style={{ color: crimeTypeIcons[type]?.color }}>
             {type}
           </span>
-
+          </div>
       {/* location */}
-        <div className='absolute top-1/2 -translate-y-1/2 right-1/2 translate-x-1/2  '>
-        <p className=''>↓↑ longitude: {longitude.toFixed(4)}</p>
-        <p className=''>←→ latitude:  {latitude.toFixed(4)}</p>
+        <div className='ctbr:absolute ctbr:top-1/2 ctbr:-translate-y-1/2 ctbr:right-1/2 ctbr:translate-x-1/2 max-h-0 mapbr:max-h-full opacity-0 mapbr:opacity-100 '>
+        <p className=''>↓↑: {longitude.toFixed(4)}</p>
+        <p className=''>←→:  {latitude.toFixed(4)}</p>
         </div>
 
           {/* Status Badge */}
         <div 
-          className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-white text-sm font-medium absolute right-2 top-1/2 -translate-y-1/2"
+          className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-white text-sm font-medium relative ctbr:absolute ctbr:right-2 ctbr:top-1/2 ctbr:-translate-y-1/2"
           style={{ backgroundColor: statusIcons[status]?.color }}
         >
           <span className="flex items-center">

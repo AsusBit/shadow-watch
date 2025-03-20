@@ -62,7 +62,7 @@ const MapComponent = ({crimes, markerRefs, setLat, setLng, enableSelect, showCon
     {crimes.map((crime) => (
   <Marker ref={(el) => (markerRefs.current[crime.id] = el)} position={[crime.latitude, crime.longitude]} key={crime.id} color={'#FFF'}>
     <Popup >
-      <div className="p-4">
+      <div className="p-0 mapbr:p-4">
         {/* Status Badge */}
         <div 
           className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-white text-sm font-medium"

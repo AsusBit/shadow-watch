@@ -39,7 +39,7 @@ const FormModal = ({ onClose, formData, setFormData, setEnableSelect }) => {
             </select>
           </div>
           <div className="mb-4">
-            <label className="block text-sm text-city-white font-medium mb-1" htmlFor="description">
+            <label className="block  text-sm text-city-white font-medium mb-1" htmlFor="description">
               Description
             </label>
             <textarea
@@ -47,8 +47,9 @@ const FormModal = ({ onClose, formData, setFormData, setEnableSelect }) => {
               name="description"
               value={formData.description}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded px-3 py-2"
+              className="w-full border font-exo border-gray-300 rounded px-3 py-2"
               rows="3"
+              style={{fontFamily: 'sans-serif'}}
               required
             ></textarea>
           </div>
