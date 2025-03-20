@@ -169,7 +169,7 @@ function App() {
     </div>
     
     {showModal && <FormModal setEnableSelect={setEnableSelect} formData={formData} setFormData={setFormData} onClose={()=> setShowModal(false)}/>}
-  </div>
+  </div> 
   );
 }
 
