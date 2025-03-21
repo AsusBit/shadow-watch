@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup,  useMapEvents } from 'react-lea
 import {Search, Hourglass, Car, Users, CheckCircle,  Skull, Lock, UserMinus, Banknote, Gavel} from 'lucide-react'
 import L from 'leaflet';
 
-// Fix the default marker icon issue from the library
+// fixing the default marker icon issue from the library
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
@@ -13,7 +13,7 @@ L.Icon.Default.mergeOptions({
 
 
 
-
+// made to dynamically choose the colors and icons of the current status of displayed crimes --extra styling
 const statusIcons = {
     "Under Investigation": { icon: <Search color="white" />, label: "Under Investigation", color: "#eab308" },
     "Pending": { icon: <Hourglass color="white" />, label: "Pending", color: "gray" },
@@ -22,6 +22,7 @@ const statusIcons = {
     "Resolved": { icon: <CheckCircle color="white" />, label: "Resolved", color: "green" }
   };
 
+// made to dynamically choose the colors and icons of displayed crimes --extra styling
   const crimeTypeIcons = {
     "Robbery": { icon: <Banknote color="#D32F2F" />, label: "Robbery", color: "#D32F2F" },
     "Assault": { icon: <Gavel color="#E65100" />, label: "Assault", color: "#E65100" },
@@ -30,12 +31,14 @@ const statusIcons = {
     "Theft": { icon: <Lock color="#1565C0" />, label: "Theft", color: "#1565C0" }
   };
 
+  // formatting date and time in a more usefriendly manner
   const formatDateTime = (dateString) => {
     const [year, month, day, hour, minute] = dateString.split('-');
     const date = new Date(year, month-1, day, hour, minute);
     return date.toLocaleString();
   }
   
+  // handles location picking when it is in that step, and saves the location
   const MapClickHandler = ({setLat, setLng, showConfirm, setShowConfirm}) => {
     useMapEvents({
       click: (e) => {
@@ -49,21 +52,26 @@ const statusIcons = {
     })
     return null
   }
+
+  // here is the map itself
 const MapComponent = ({crimes, markerRefs, setLat, setLng, enableSelect, showConfirm, setShowConfirm}) => {
-  const position = [21.505, 56.09]; // Latitude and Longitude for the center of the map
-  // what I can do is, take the lat and lng from here, and if their values have any value (from null to true) it places a marker or submits the function
+  const position = [21.505, 56.09]; // original latitude and longitude for the center of the map
   return (
     <MapContainer center={position} zoom={7} style={{ height: '100%', width: '100%' }}>
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
+
+      {/* this is the map click handler conditionally rendered when needed */}
       {enableSelect && <MapClickHandler showConfirm={showConfirm} setShowConfirm={setShowConfirm} setLat={setLat} setLng={setLng}/>}
+      
+    {/* here is where we render all the crimes we got from the local data or data.json*/}
     {crimes.map((crime) => (
   <Marker ref={(el) => (markerRefs.current[crime.id] = el)} position={[crime.latitude, crime.longitude]} key={crime.id} color={'#FFF'}>
     <Popup >
       <div className="p-0 mapbr:p-4">
-        {/* Status Badge */}
+        {/* status Badge */}
         <div 
           className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-white text-sm font-medium"
           style={{ backgroundColor: statusIcons[crime.report_status]?.color }}
@@ -74,12 +82,12 @@ const MapComponent = ({crimes, markerRefs, setLat, setLng, enableSelect, showCon
           <span>{statusIcons[crime.report_status]?.label}</span>
         </div>
         
-        {/* Crime Details */}
+        {/* crime Details */}
         <div className="mb-4 text-gray-700 font-exo">
           <p className="mb-2">{crime.report_details}</p>
         </div>
         
-        {/* Crime Type */}
+        {/* crime Type */}
         <div 
           className="flex items-center gap-2 p-2 rounded-md text-sm"
           style={{ 
@@ -94,7 +102,7 @@ const MapComponent = ({crimes, markerRefs, setLat, setLng, enableSelect, showCon
             {crime.crime_type}
           </span>
         </div>
-
+        {/* crime time and date */}
         <div className='my-3'>
             <span>
                 {formatDateTime(crime.report_date_time)}
@@ -104,14 +112,15 @@ const MapComponent = ({crimes, markerRefs, setLat, setLng, enableSelect, showCon
 
       </div>
 
+    {/* closing of popup component */}
     </Popup>
-
+  {/* closing of marker component */}
   </Marker>
 ))}
-
-    </MapContainer>
+{/* closing of map component */}
+</MapContainer>
 
   );
 };
 
-export default MapComponent;
+export default MapComponent; // exporting the component to use in App.js
