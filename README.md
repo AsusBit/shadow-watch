@@ -4,25 +4,55 @@ A modern web application for reporting and tracking crimes in CityX. Built with 
 
 🌐 Live Demo: [https://shadow-watch.vercel.app](https://shadow-watch.vercel.app)
 
-## Features
+## Project Overview
 
+Shadow Watch is a comprehensive crime reporting and tracking system that combines modern web technologies with user-friendly interfaces. The application enables citizens to report crimes, track their status, and view all reported incidents on an interactive map. Built with a focus on responsiveness and user experience, it works seamlessly across all devices.
+
+## Key Features
+
+### Core Functionality
 - 🗺️ Interactive map interface for crime reporting and visualization
-- 🔍 Dynamic search functionality for crimes (by ID, type, or date)
-- 📱 Fully responsive design for all devices with no UI overlaps or glitches
-- 💾 Local Storage support for persistent data across sessions
-- 📊 Real-time crime status tracking with visual indicators
-- 🎨 Modern UI with intuitive crime type indicators and status badges
-- 🔒 PWA (Progressive Web App) support for offline access
 - 📝 Easy crime reporting system with map-based location selection
+- 🔍 Dynamic search functionality for crimes (by ID, type, or date)
+- 📊 Real-time crime status tracking with visual indicators
+
+### User Experience
+- 📱 Fully responsive design for all devices with no UI overlaps or glitches
+- 🎨 Modern UI with intuitive crime type indicators and status badges
 - 🎯 Click-to-focus functionality on crime locations from list view
+- 💾 Local Storage support for persistent data across sessions
+- 🔒 PWA (Progressive Web App) support for offline access
+
+## Demo
+
+### Desktop View
+![Desktop Interface](src/gifs/window.gif)
+*The main interface showing the crime list and map view side by side*
+
+### Mobile Responsiveness
+![Mobile Interface](src/gifs/phone.gif)
+*Seamless adaptation to mobile devices with optimized layout and touch interactions*
+
+### Interactive Map Features
+![Map Features](src/gifs/map.gif)
+*Interactive map with crime markers, popups, and location selection*
+
+### Crime Reporting Flow
+![Report Crime](src/gifs/report.gif)
+*Step-by-step process of reporting a new crime with location selection*
+
+### Search Functionality
+![Search Feature](src/gifs/search.gif)
+*Real-time filtering of crimes by various criteria*
 
 ## Tech Stack
 
-- React.js
-- Leaflet.js for map integration
-- Tailwind CSS for styling
-- Local Storage for data persistence
-- Lucide Icons for UI elements
+- **Frontend Framework**: React.js for dynamic UI components
+- **Mapping**: Leaflet.js for interactive map integration
+- **Styling**: Tailwind CSS for responsive and modern design
+- **Data Persistence**: Local Storage for offline data management
+- **UI Elements**: Lucide Icons for consistent and beautiful icons
+- **Deployment**: Vercel for seamless hosting and deployment
 
 ## Getting Started
 
@@ -82,14 +112,22 @@ npm run build
 
 This will create an optimized production build in the `build` folder.
 
-## Usage
+## Usage Guide
 
-1. View all reported crimes on the interactive map
-2. Use the search bar to filter crimes by ID, type, or date
-3. Click on crime cards to focus on their location on the map
-4. Report new crimes using the "Report Crime" button
-5. Select crime location on the map
-6. Fill in crime details and submit
+1. **View Crimes**: Browse all reported crimes on the interactive map
+2. **Search Crimes**: Use the search bar to filter crimes by:
+   - Crime ID
+   - Crime type
+   - Date and time
+3. **Interact with Map**: 
+   - Click crime cards to focus on their location
+   - Zoom and pan the map
+   - Click markers to view crime details
+4. **Report Crimes**:
+   - Click "Report Crime" button
+   - Fill in crime details
+   - Select location on the map
+   - Submit the report
 
 ## Contributing
 
