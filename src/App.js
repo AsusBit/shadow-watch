@@ -136,7 +136,7 @@ function App() {
 
   const [showModal, setShowModal] = useState(false) // init for showing form modal
 
-  if (loading) return <>Loading...</> // showing loading instead of an incomplete screen
+  if (loading) return <div className='font-silkscreen text-city-white'>Loading Crimes...<br/><span className='text-city-bright-red'>Please Wait, City Defender.</span></div> // showing loading instead of an incomplete screen
   if (error){
     return <>Error: {error.message}</> // showing an error message instead of an incomplete screen
   }
